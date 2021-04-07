@@ -7,9 +7,9 @@
     "build": "next build",
     "clean": "rm -rf .next",
     "start": "next start --port ${PORT:-3000}",
-    "lint:styles": "stylelint './src/**/*.ts' './src/**/*.tsx'",
-    "lint:es": "eslint './src/**/*.ts' './src/**/*.tsx'",
-    "lint:fix": "eslint './src/**/*.ts' './src/**/*.tsx' --fix",
+    "lint:styles": "stylelint \"./src/**/*.ts\" \"./src/**/*.tsx\"",
+    "lint:es": "eslint \"./src/**/*.ts\" \"./src/**/*.tsx\"",
+    "lint:fix": "eslint \"./src/**/*.ts\" \"./src/**/*.tsx\" --fix",
     "lint": "yarn lint:styles && yarn lint:es"
   },
   "dependencies": {

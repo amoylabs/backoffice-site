@@ -15,12 +15,15 @@
             "jsx": true
         },
         "ecmaVersion": 2018,
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": [
+            "./tsconfig.eslint.json"
+        ]
     },
     "plugins": ["react", "@typescript-eslint"],
     "rules": {
         "eqeqeq": ["error", "smart"],
-        "indent": ["error", "tab", { "SwitchCase": 1 }],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "linebreak-style": ["error", "unix"],
         "no-unused-vars": "off",
         "semi": "off",

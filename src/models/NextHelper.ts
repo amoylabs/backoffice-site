@@ -1,16 +1,15 @@
-import _ from 'lodash'
 import { NextPageContext } from 'next'
 import Router from 'next/router'
 import qs from 'qs'
 import * as URI from 'uri-js'
 
 export function parseQuery(ctx: NextPageContext) {
-    return qs.parse(URI.parse(ctx.asPath || '').query || '', { allowDots: true })
+    return qs.parse(URI.parse(ctx.asPath ?? '').query ?? '', { allowDots: true })
 }
 
 export function redirectKeepQuery(ctx: NextPageContext, path: string, code: 301 | 302 | 307 = 302) {
     const newLocation = URI.serialize({
-        ...URI.parse(ctx.asPath || ''),
+        ...URI.parse(ctx.asPath ?? ''),
         path: path,
     })
     // console.log("New location")

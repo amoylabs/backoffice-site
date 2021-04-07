@@ -25,9 +25,9 @@ export const saveState = (state: any) => {
 }
 
 function handleChange() {
-    let currentState = store.getState()
+    const currentState = store.getState()
     saveState(currentState)
-    console.log('Saved State')
+    // console.log('Saved State')
     // console.log(loadState())
 }
 

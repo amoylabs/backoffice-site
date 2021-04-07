@@ -17,7 +17,7 @@ class MyApp extends App<AppProps> {
         const { Component, pageProps, router } = this.props
         let canonicalHref = publicRuntimeConfig.CANONICAL_URL
 
-        if (pageProps != null && pageProps.meta != null && pageProps.meta.canonicalPath != null) {
+        if (pageProps?.meta?.canonicalPath != null) {
             canonicalHref += pageProps.meta.canonicalPath
         } else {
             canonicalHref += router.pathname
