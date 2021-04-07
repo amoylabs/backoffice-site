@@ -4,6 +4,8 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import getConfig from 'next/config'
 import store, { wrapper } from '../models/redux/store'
+import '../styles/global.css'
+
 const { publicRuntimeConfig } = getConfig()
 
 type AppProps = {
