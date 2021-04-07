@@ -1,0 +1,1 @@
+This is the directory for shimming module definitions for dependencies that do not have typescript definitions available. It starts with a "z" so it's at the bottom and out of the way in directory views.
