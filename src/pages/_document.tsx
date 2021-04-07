@@ -3,6 +3,7 @@ import React from 'react'
 import { ServerStyleSheet } from 'styled-components'
 import getConfig from 'next/config'
 import { redirectKeepQuery } from '../models/NextHelper'
+
 const { publicRuntimeConfig } = getConfig()
 
 export default class MyDocument extends Document {

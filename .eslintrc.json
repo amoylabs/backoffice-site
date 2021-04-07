@@ -16,17 +16,29 @@
         },
         "ecmaVersion": 2018,
         "sourceType": "module",
-        "project": [
-            "./tsconfig.eslint.json"
-        ]
+        "project": ["./tsconfig.eslint.json"]
     },
-    "plugins": ["react", "@typescript-eslint"],
+    "plugins": ["react", "eslint-plugin", "@typescript-eslint", "import", "eslint-comments"],
     "rules": {
         "eqeqeq": ["error", "smart"],
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "linebreak-style": ["error", "unix"],
         "no-unused-vars": "off",
         "semi": "off",
+        "no-multi-assign": "warn",
+        "no-underscore-dangle": "off",
+        "no-console": "off",
+        "global-require": "warn",
+        "max-classes-per-file": ["error", 2],
+        "no-param-reassign": [
+            "error",
+            {
+                "props": false
+            }
+        ],
+        "import/no-dynamic-require": "warn",
+        "curly": ["error", "all"],
+        "no-mixed-operators": "error",
 
         //
         // eslint for typescript
@@ -92,7 +104,70 @@
         //
         "@typescript-eslint/internal/no-poorly-typed-ts-props": "off",
         "@typescript-eslint/internal/no-typescript-default-import": "off",
-        "@typescript-eslint/internal/prefer-ast-types-enum": "off"
+        "@typescript-eslint/internal/prefer-ast-types-enum": "off",
+
+        //
+        // eslint-plugin-eslint-comment
+        //
+
+        // require a eslint-enable comment for every eslint-disable comment
+        "eslint-comments/disable-enable-pair": [
+            "error",
+            {
+                "allowWholeFile": true
+            }
+        ],
+        // disallow a eslint-enable comment for multiple eslint-disable comments
+        "eslint-comments/no-aggregating-enable": "error",
+        // disallow duplicate eslint-disable comments
+        "eslint-comments/no-duplicate-disable": "error",
+        // disallow eslint-disable comments without rule names
+        "eslint-comments/no-unlimited-disable": "error",
+        // disallow unused eslint-disable comments
+        "eslint-comments/no-unused-disable": "error",
+        // disallow unused eslint-enable comments
+        "eslint-comments/no-unused-enable": "error",
+        // disallow ESLint directive-comments
+        "eslint-comments/no-use": [
+            "error",
+            {
+                "allow": ["eslint-disable", "eslint-disable-line", "eslint-disable-next-line", "eslint-enable"]
+            }
+        ],
+
+        //
+        // eslint-plugin-import
+        //
+
+        // disallow non-import statements appearing before import statements
+        "import/first": "error",
+        // Require a newline after the last import/require in a group
+        "import/newline-after-import": "error",
+        // Forbid import of modules using absolute paths
+        "import/no-absolute-path": "error",
+        // disallow AMD require/define
+        "import/no-amd": "error",
+        // forbid default exports
+        "import/no-default-export": "off",
+        // Forbid the use of extraneous packages
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": true,
+                "peerDependencies": true,
+                "optionalDependencies": false
+            }
+        ],
+        // Forbid mutable exports
+        "import/no-mutable-exports": "error",
+        // Prevent importing the default as if it were named
+        "import/no-named-default": "error",
+        // Prohibit named exports
+        "import/no-named-export": "off", // we want everything to be a named export
+        // Forbid a module from importing itself
+        "import/no-self-import": "error",
+        // Require modules with a single export to use a default export
+        "import/prefer-default-export": "off" // we want everything to be named
     },
     "settings": {
         "react": {

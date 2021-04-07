@@ -1,6 +1,7 @@
 import { NextPageContext } from 'next'
 import getConfig from 'next/config'
 import React from 'react'
+
 const { publicRuntimeConfig } = getConfig()
 
 const ALLOW_TEXT = `Sitemap: ${publicRuntimeConfig.CANONICAL_URL}/api/sitemap.xml
