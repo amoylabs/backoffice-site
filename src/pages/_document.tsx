@@ -7,6 +7,7 @@ import { redirectKeepQuery } from '../models/NextHelper'
 const { publicRuntimeConfig } = getConfig()
 
 export default class MyDocument extends Document {
+    // check out https://nextjs.org/docs/advanced-features/custom-document#caveats for custom document
     static async getInitialProps(ctx: DocumentContext) {
         // redirect http to https. We may need to consider using a custom server (e.g. https://github.com/zeit/next.js/tree/canary/examples/custom-server-koa)
         // with true middleware if our middleware layer gets more complex.
