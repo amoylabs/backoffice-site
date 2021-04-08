@@ -1,9 +1,8 @@
 import App from 'next/app'
 import Head from 'next/head'
 import React from 'react'
-import { Provider } from 'react-redux'
 import getConfig from 'next/config'
-import store, { wrapper } from '../models/redux/store'
+import { wrapper } from '../redux/store'
 import '../styles/global.css'
 
 const { publicRuntimeConfig } = getConfig()
@@ -26,12 +25,12 @@ class MyApp extends App<AppProps> {
         }
 
         return (
-            <Provider store={store}>
+            <>
                 <Head>
                     <link rel="canonical" href={canonicalHref} key="canonical" />
                 </Head>
                 <Component {...pageProps} />
-            </Provider>
+            </>
         )
     }
 }
