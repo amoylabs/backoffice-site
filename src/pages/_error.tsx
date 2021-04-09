@@ -1,29 +1,17 @@
 import React from 'react'
-//import ErrorPage from 'next/error'
 import { NextPageContext } from 'next'
 
 type Props = {
     statusCode: number
 }
 
-type SSProps = {
-    props: Props
+function ErrorPage({ statusCode }: Props) {
+    return <p>{statusCode ? `An error ${statusCode} occurred on server` : 'An error occurred on client'}</p>
 }
 
-export async function getStaticProps(ctx: NextPageContext): Promise<SSProps> {
-    const { res, err } = ctx
-    const statusCode = res ? res.statusCode : err ? err.statusCode ?? 404 : 404
-
-    return {
-        props: {
-            statusCode: statusCode,
-        },
-    }
-}
-
-const ErrorPage = (props: Props) => {
-    const { statusCode } = props
-    return <>{statusCode}</>
+ErrorPage.getInitialProps = ({ res, err } : NextPageContext) => {
+    const statusCode = res ? res.statusCode : err ? err.statusCode : 404
+    return { statusCode }
 }
 
 export default ErrorPage
