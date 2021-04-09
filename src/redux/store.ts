@@ -2,11 +2,11 @@ import { createStore, applyMiddleware, combineReducers, Middleware } from 'redux
 import { createWrapper, MakeStore } from 'next-redux-wrapper'
 import { persistStore, persistReducer } from 'redux-persist'
 import thunkMiddleware from 'redux-thunk'
+// import storage from 'redux-persist/lib/storage'
+import storageSession from 'redux-persist/lib/storage/session'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { composeWithDevTools as composeWithDevTools4Production } from 'redux-devtools-extension/logOnlyInProduction'
 import logger from 'redux-logger'
-// import storage from 'redux-persist/lib/storage'
-import storageSession from 'redux-persist/lib/storage/session'
 
 import State from '../interfaces/State'
 import user from './user/reducer'
@@ -28,14 +28,14 @@ const combinedReducer = combineReducers({
 })
 
 // create a makeStore function
-const makeStore: MakeStore<State> = () => {
-    if (typeof window === 'undefined') {
+const makeStore: MakeStore<State> = ({ isServer }: any) => {
+    if (isServer) {
         // If it's on server side, create a store
         return createStore(combinedReducer, bindMiddleware([thunkMiddleware]))
     } else {
         // If it's on client side, create a store which will persist
         const persistConfig = {
-            key: '_foobar',
+            key: '_state',
             whitelist: ['user', 'token'], // adding reducers which will be persisted
             storage: storageSession, // if needed, use a safer storage
         }
