@@ -1,34 +1,16 @@
-import _ from 'lodash'
 import { createStore, applyMiddleware, combineReducers, Middleware } from 'redux'
-import { HYDRATE, createWrapper, MakeStore, Context } from 'next-redux-wrapper'
+import { createWrapper, MakeStore } from 'next-redux-wrapper'
+import { persistStore, persistReducer } from 'redux-persist'
 import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { composeWithDevTools as composeWithDevTools4Production } from 'redux-devtools-extension/logOnlyInProduction'
+import logger from 'redux-logger'
+// import storage from 'redux-persist/lib/storage'
+import storageSession from 'redux-persist/lib/storage/session'
+
+import State from '../interfaces/State'
 import user from './user/reducer'
 import token from './token/reducer'
-
-const STATE_KEY = '__state'
-
-const loadState = () => {
-    try {
-        const serializedState = sessionStorage.getItem(STATE_KEY)
-        if (serializedState === null) {
-            return undefined
-        }
-        return JSON.parse(serializedState)
-    } catch (err) {
-        return undefined
-    }
-}
-
-const saveState = (state: any) => {
-    try {
-        const serializedState = JSON.stringify(state)
-        sessionStorage.setItem(STATE_KEY, serializedState)
-    } catch {
-        // ignore write errors
-    }
-}
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -37,7 +19,7 @@ const bindMiddleware = (middleware: Middleware[]) => {
         return composeWithDevTools4Production(applyMiddleware(...middleware))
     }
 
-    return composeWithDevTools(applyMiddleware(...middleware))
+    return composeWithDevTools(applyMiddleware(logger, ...middleware))
 }
 
 const combinedReducer = combineReducers({
@@ -45,33 +27,30 @@ const combinedReducer = combineReducers({
     token,
 })
 
-const reducer = (state: any, action: any) => {
-    if (action.type === HYDRATE) {
-        const nextState = {
-            ...state, // use previous state
-            ...action.payload, // apply delta from hydration
+// create a makeStore function
+const makeStore: MakeStore<State> = () => {
+    if (typeof window === 'undefined') {
+        // If it's on server side, create a store
+        return createStore(combinedReducer, bindMiddleware([thunkMiddleware]))
+    } else {
+        // If it's on client side, create a store which will persist
+        const persistConfig = {
+            key: '_foobar',
+            whitelist: ['user', 'token'], // adding reducers which will be persisted
+            storage: storageSession, // if needed, use a safer storage
         }
 
-        return nextState
-    } else {
-        return combinedReducer(state, action)
+        // Create a new reducer with our existing reducer
+        const persistedReducer = persistReducer(persistConfig, combinedReducer)
+        // Creating the store again
+        const store = createStore(persistedReducer, bindMiddleware([thunkMiddleware])) as any
+        // This creates a persistor object & push that persisted object to .__persistor
+        // So that we can avail the persistability feature
+        store.__persistor = persistStore(store)
+
+        return store
     }
 }
-
-const store = createStore(reducer, loadState(), bindMiddleware([thunkMiddleware]))
-
-function handleStoreChange() {
-    const currentState = store.getState()
-    saveState(currentState)
-}
-store.subscribe(_.throttle(handleStoreChange))
-
-export interface State {
-    tick: string
-}
-
-// create a makeStore function
-const makeStore: MakeStore<State> = (_context: Context) => store
 
 // export an assembled wrapper
 export const wrapper = createWrapper<State>(makeStore, { debug: !isProduction })

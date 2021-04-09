@@ -1,8 +1,12 @@
 import App from 'next/app'
 import Head from 'next/head'
-import React from 'react'
 import getConfig from 'next/config'
+import React from 'react'
+import { Spinner } from 'react-bootstrap'
+import { ReactReduxContext } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 import { wrapper } from '../redux/store'
+
 import '../styles/global.css'
 
 const { publicRuntimeConfig } = getConfig()
@@ -25,12 +29,16 @@ class MyApp extends App<AppProps> {
         }
 
         return (
-            <>
-                <Head>
-                    <link rel="canonical" href={canonicalHref} key="canonical" />
-                </Head>
-                <Component {...pageProps} />
-            </>
+            <ReactReduxContext.Consumer>
+                {({ store }: any) =>
+                    <PersistGate persistor={store.__persistor} loading={<Spinner animation="border" variant="info" />}>
+                        <Head>
+                            <link rel="canonical" href={canonicalHref} key="canonical" />
+                        </Head>
+                        <Component {...pageProps} />
+                    </PersistGate>
+                }
+            </ReactReduxContext.Consumer>
         )
     }
 }
