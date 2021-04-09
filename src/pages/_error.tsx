@@ -10,7 +10,7 @@ type SSProps = {
     props: Props
 }
 
-export async function getServerSideProps(ctx: NextPageContext): Promise<SSProps> {
+export async function getStaticProps(ctx: NextPageContext): Promise<SSProps> {
     const { res, err } = ctx
     const statusCode = res ? res.statusCode : err ? err.statusCode ?? 404 : 404
 
