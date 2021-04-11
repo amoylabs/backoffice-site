@@ -10,5 +10,6 @@ exports.publicRuntimeConfig = {
 }
 
 exports.serverRuntimeConfig = {
-    API_ID: process.env.API_ID || 'bo-site',
+    APP_ID: process.env.APP_ID || '2db99191-2143-4b20-9833-a79c1dc0dbfb',
+    APP_SIGNING_KEY: process.env.APP_SIGNING_KEY || 'hxC8gCHoGHUH5ajzugTPyGfw5gHutxEJtLnyZbdti4ctfejPpB',
 }
