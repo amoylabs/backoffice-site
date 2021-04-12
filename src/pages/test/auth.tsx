@@ -43,6 +43,7 @@ export async function getServerSideProps(_ctx: NextPageContext) {
 const TestAuthPage = (props: Props) => {
     const [ name, setName ] = useState("")
     const [ pwd, setPwd ] = useState("")
+    const [ userToken, setUserToken ] = useState("")
 
     const handleNameInput = (e : any) => {
         setName(e.target.value)
@@ -55,19 +56,16 @@ const TestAuthPage = (props: Props) => {
     const handleBtnClick = async (e: any) => {
         e.preventDefault()
 
-        const { data: pkd } = await axios.get<string>(`${publicRuntimeConfig.API_URL}/v1/auth/rsa-key`)
-        console.log("DDDD1", pkd)
-        // const encryptedPwd = crypto.publicEncrypt({
-        //     key: Buffer.from(publicKey),
-        // }, Buffer.from(pwd))
-        // console.log("DDDD", encryptedPwd)
+        try {
+            const { data: token } = await axios.post<string>(`${publicRuntimeConfig.API_URL}/v1/auth/user`, {
+                un: name,
+                pd: Buffer.from(pwd, 'utf-8').toString("base64"),
+            })
 
-        // const { data: token } = await axios.post<string>(`${publicRuntimeConfig.API_URL}/v1/auth/user`, {
-        //     un: name,
-        //     pk: publicKey,
-        //     pd: encryptedPwd.toString("base64"),
-        // })
-        // console.log(`DDDD - ${token}`)
+            setUserToken(token)
+        } catch (err) {
+            console.log(err.response?.data?.errorMessages)
+        }
     }
 
     return (
@@ -75,6 +73,10 @@ const TestAuthPage = (props: Props) => {
             <Container>
                 <Row>
                     <Col><pre>{props.token}</pre></Col>
+                </Row>
+
+                <Row>
+                    <Col><pre>{userToken}</pre></Col>
                 </Row>
 
                 <Form.Row>
