@@ -58,7 +58,7 @@ const TestAuthPage = (props: Props) => {
 
         try {
             const { data: token } = await axios.post<string>(`${publicRuntimeConfig.API_URL}/v1/auth/user`, {
-                un: name,
+                un: Buffer.from(name, 'utf-8').toString("base64"),
                 pd: Buffer.from(pwd, 'utf-8').toString("base64"),
             })
 
